@@ -18,6 +18,7 @@ LARGEST_CONST = 2e6     # the largest value of c to go up to before giving up
 REDUCE_CONST = False    # try to lower c each iteration; faster to set to false
 TARGETED = True         # should we target one specific class? or just be wrong?
 CONST_FACTOR = 2.0      # f>1, rate at which we increase constant, smaller better
+CONFIDENCE = .01
 
 class CarliniL0:
     def __init__(self, sess, model,
@@ -25,6 +26,7 @@ class CarliniL0:
                  max_iterations = MAX_ITERATIONS, abort_early = ABORT_EARLY,
                  initial_const = INITIAL_CONST, largest_const = LARGEST_CONST,
                  reduce_const = REDUCE_CONST, const_factor = CONST_FACTOR,
+                 confidence = CONFIDENCE,
                  independent_channels = False):
         """
         The L_0 optimized attack. 
@@ -108,10 +110,10 @@ class CarliniL0:
         other = tf.reduce_max((1-tlab)*output - (tlab*10000),1)
         if self.TARGETED:
             # if targetted, optimize for making the other class most likely
-            loss1 = tf.maximum(0.0, other-real+.01)
+            loss1 = tf.maximum(0.0, other-real+confidence)
         else:
             # if untargeted, optimize for making this class least likely.
-            loss1 = tf.maximum(0.0, real-other+.01)
+            loss1 = tf.maximum(0.0, real-other+confidence)
 
         # sum up the losses
         loss2 = tf.reduce_sum(tf.square(newimg-tf.tanh(timg)/2))
@@ -153,7 +155,7 @@ class CarliniL0:
                     oldmodifier = self.sess.run(modifier)
 
                     if step%(self.MAX_ITERATIONS//10) == 0:
-                        print(step,*sess.run((loss1,loss2),feed_dict=feed_dict))
+                        print(step,sess.run((loss1,loss2),feed_dict=feed_dict))
 
                     # perform the update step
                     _, works = sess.run([train, loss1], feed_dict=feed_dict)

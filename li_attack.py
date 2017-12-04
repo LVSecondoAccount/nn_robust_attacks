@@ -18,6 +18,7 @@ LARGEST_CONST = 2e+1    # the largest value of c to go up to before giving up
 REDUCE_CONST = False    # try to lower c each iteration; faster to set to false
 TARGETED = True         # should we target one specific class? or just be wrong?
 CONST_FACTOR = 2.0      # f>1, rate at which we increase constant, smaller better
+CONFIDENCE = 0.0
 
 class CarliniLi:
     def __init__(self, sess, model,
@@ -25,6 +26,7 @@ class CarliniLi:
                  max_iterations = MAX_ITERATIONS, abort_early = ABORT_EARLY,
                  initial_const = INITIAL_CONST, largest_const = LARGEST_CONST,
                  reduce_const = REDUCE_CONST, decrease_factor = DECREASE_FACTOR,
+                 confidence = CONFIDENCE,
                  const_factor = CONST_FACTOR):
         """
         The L_infinity optimized attack. 
@@ -91,10 +93,10 @@ class CarliniLi:
     
         if self.TARGETED:
             # if targetted, optimize for making the other class most likely
-            loss1 = tf.maximum(0.0,other-real)
+            loss1 = tf.maximum(0.0,other-real+confidence)
         else:
             # if untargeted, optimize for making this class least likely.
-            loss1 = tf.maximum(0.0,real-other)
+            loss1 = tf.maximum(0.0,real-other+confidence)
 
         # sum up the losses
         loss2 = tf.reduce_sum(tf.maximum(0.0,tf.abs(newimg-tf.tanh(timg)/2)-tau))
