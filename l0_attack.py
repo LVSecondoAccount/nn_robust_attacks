@@ -62,6 +62,7 @@ class CarliniL0:
         self.LARGEST_CONST = largest_const
         self.REDUCE_CONST = reduce_const
         self.const_factor = const_factor
+        self.confidence = confidence
         self.independent_channels = independent_channels
 
         self.grad = self.gradient_descent(sess, model)
@@ -110,10 +111,10 @@ class CarliniL0:
         other = tf.reduce_max((1-tlab)*output - (tlab*10000),1)
         if self.TARGETED:
             # if targetted, optimize for making the other class most likely
-            loss1 = tf.maximum(0.0, other-real+confidence)
+            loss1 = tf.maximum(0.0, other-real+self.confidence)
         else:
             # if untargeted, optimize for making this class least likely.
-            loss1 = tf.maximum(0.0, real-other+confidence)
+            loss1 = tf.maximum(0.0, real-other+self.confidence)
 
         # sum up the losses
         loss2 = tf.reduce_sum(tf.square(newimg-tf.tanh(timg)/2))

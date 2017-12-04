@@ -62,6 +62,7 @@ class CarliniLi:
         self.LARGEST_CONST = largest_const
         self.DECREASE_FACTOR = decrease_factor
         self.REDUCE_CONST = reduce_const
+        self.confidence = confidence
         self.const_factor = const_factor
 
         self.grad = self.gradient_descent(sess, model)
@@ -93,10 +94,10 @@ class CarliniLi:
     
         if self.TARGETED:
             # if targetted, optimize for making the other class most likely
-            loss1 = tf.maximum(0.0,other-real+confidence)
+            loss1 = tf.maximum(0.0,other-real+self.confidence)
         else:
             # if untargeted, optimize for making this class least likely.
-            loss1 = tf.maximum(0.0,real-other+confidence)
+            loss1 = tf.maximum(0.0,real-other+self.confidence)
 
         # sum up the losses
         loss2 = tf.reduce_sum(tf.maximum(0.0,tf.abs(newimg-tf.tanh(timg)/2)-tau))
