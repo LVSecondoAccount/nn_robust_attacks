@@ -28,4 +28,4 @@ with tf.Session() as sess:
         #print(pred)
         #print('real',data.test_labels[i],'pred',np.argmax(pred))
         r.append(np.argmax(pred,1) == np.argmax(data.test_labels[i:i+BATCH_SIZE],1))
-        print(np.mean(r))
+        print((np.mean(r)))

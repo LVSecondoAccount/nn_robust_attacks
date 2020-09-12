@@ -23,7 +23,7 @@ def train(data, file_name, params, num_epochs=50, batch_size=128, train_temp=1, 
     """
     model = Sequential()
 
-    print(data.train_data.shape)
+    print((data.train_data.shape))
     
     model.add(Conv2D(params[0], (3, 3),
                             input_shape=data.train_data.shape[1:]))

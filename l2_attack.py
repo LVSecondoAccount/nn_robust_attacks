@@ -129,9 +129,9 @@ class CarliniL2:
         If self.targeted is false, then targets are the original class labels.
         """
         r = []
-        print('go up to',len(imgs))
+        print(('go up to',len(imgs)))
         for i in range(0,len(imgs),self.batch_size):
-            print('tick',i)
+            print(('tick',i))
             r.extend(self.attack_batch(imgs[i:i+self.batch_size], targets[i:i+self.batch_size]))
         return np.array(r)
 
@@ -195,7 +195,7 @@ class CarliniL2:
 
                 # print out the losses every 10%
                 if iteration%(self.MAX_ITERATIONS//10) == 0:
-                    print(iteration,self.sess.run((self.loss,self.loss1,self.loss2)))
+                    print((iteration,self.sess.run((self.loss,self.loss1,self.loss2))))
 
                 # check if we should abort search if we're getting nowhere.
                 if self.ABORT_EARLY and iteration%(self.MAX_ITERATIONS//10) == 0:

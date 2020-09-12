@@ -23,7 +23,7 @@ from keras.models import load_model
 def load_batch(fpath, label_key='labels'):
     f = open(fpath, 'rb')
     d = pickle.load(f, encoding="bytes")
-    for k, v in d.items():
+    for k, v in list(d.items()):
         del(d[k])
         d[k.decode("utf8")] = v
     f.close()

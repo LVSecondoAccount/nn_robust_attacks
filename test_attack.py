@@ -27,7 +27,7 @@ def show(img):
     if len(img) != 784: return
     print("START")
     for i in range(28):
-        print("".join([remap[int(round(x))] for x in img[i*28:i*28+28]]))
+        print(("".join([remap[int(round(x))] for x in img[i*28:i*28+28]])))
 
 
 def generate_data(data, samples, targeted=True, start=0, inception=False):
@@ -45,9 +45,9 @@ def generate_data(data, samples, targeted=True, start=0, inception=False):
     for i in range(samples):
         if targeted:
             if inception:
-                seq = random.sample(range(1,1001), 10)
+                seq = random.sample(list(range(1,1001)), 10)
             else:
-                seq = range(data.test_labels.shape[1])
+                seq = list(range(data.test_labels.shape[1]))
 
             for j in seq:
                 if (j == np.argmax(data.test_labels[start+i])) and (inception == False):
@@ -75,7 +75,7 @@ if __name__ == "__main__":
         adv = attack.attack(inputs, targets)
         timeend = time.time()
         
-        print("Took",timeend-timestart,"seconds to run",len(inputs),"samples.")
+        print(("Took",timeend-timestart,"seconds to run",len(inputs),"samples."))
 
         for i in range(len(adv)):
             print("Valid:")
@@ -83,6 +83,6 @@ if __name__ == "__main__":
             print("Adversarial:")
             show(adv[i])
             
-            print("Classification:", model.model.predict(adv[i:i+1]))
+            print(("Classification:", model.model.predict(adv[i:i+1])))
 
-            print("Total distortion:", np.sum((adv[i]-inputs[i])**2)**.5)
+            print(("Total distortion:", np.sum((adv[i]-inputs[i])**2)**.5))

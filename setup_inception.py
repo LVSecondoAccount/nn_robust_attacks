@@ -35,9 +35,9 @@ to use this script to perform image recognition.
 https://tensorflow.org/tutorials/image_recognition/
 """
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import os.path
 import re
@@ -123,7 +123,7 @@ class NodeLookup(object):
 
     # Loads the final mapping of integer node ID to human-readable string
     node_id_to_name = {}
-    for key, val in node_id_to_uid.items():
+    for key, val in list(node_id_to_uid.items()):
       if val not in uid_to_human:
         tf.logging.fatal('Failed to locate: %s', val)
       name = uid_to_human[val]
@@ -258,7 +258,7 @@ class ImageNet:
     pool = Pool(8)
     r = pool.map(readimg, os.listdir("../imagenetdata/imgs/")[:200])
     r = [x for x in r if x != None]
-    test_data, test_labels = zip(*r)
+    test_data, test_labels = list(zip(*r))
     self.test_data = np.array(test_data)
     self.test_labels = np.zeros((len(test_labels), 1008))
     self.test_labels[np.arange(len(test_labels)), test_labels] = 1

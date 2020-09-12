@@ -121,7 +121,7 @@ class CarliniLi:
             sess.run(init)
             while CONST < self.LARGEST_CONST:
                 # try solving for each value of the constant
-                print('try const', CONST)
+                print(('try const', CONST))
                 for step in range(self.MAX_ITERATIONS):
                     feed_dict={timg: imgs, 
                                tlab:labs, 
@@ -129,7 +129,7 @@ class CarliniLi:
                                simg: starts,
                                const: CONST}
                     if step%(self.MAX_ITERATIONS//10) == 0:
-                        print(step,sess.run((loss,loss1,loss2),feed_dict=feed_dict))
+                        print((step,sess.run((loss,loss1,loss2),feed_dict=feed_dict)))
 
                     # perform the update step
                     _, works = sess.run([train, loss], feed_dict=feed_dict)
@@ -188,7 +188,7 @@ class CarliniLi:
             if actualtau < tau:
                 tau = actualtau
     
-            print("Tau",tau)
+            print(("Tau",tau))
 
             prev = nimg
             tau *= self.DECREASE_FACTOR
